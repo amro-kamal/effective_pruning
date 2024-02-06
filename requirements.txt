@@ -1,0 +1,4 @@
+faiss-gpu
+tqdm
+numpy
+torch
