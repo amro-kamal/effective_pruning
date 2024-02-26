@@ -12,3 +12,5 @@ ipython_config.py
 
 # Mac OS
 .DS_Store
+
+*.ipynb

@@ -66,3 +66,20 @@ python prune.py \
 
 The code will create a trie file which can be used to filter a webdataset during data loading.
 
+## BibTex:
+
+If you find our study or our dataset helpful, please cite our paper:
+
+```bibtex
+@inproceedings{kamal2024density,
+  title={Effective pruning of web-scale datasets based on complexity of concept clusters,
+  author={Amro Abbas and 
+         Evgenia Rusak and
+         Kushal Tirumala and
+         Wieland Brendel and
+         Kamalika Chaudhuri and
+         Ari S. Morcos},
+  booktitle={International Conference on Learning Representations},
+  year={2024},
+}
+```
