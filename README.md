@@ -66,7 +66,7 @@ python prune.py \
 
 The code will create a trie file which can be used to filter a webdataset during data loading.
 
-## BibTex:
+## BibTeX:
 
 If you find our study or pruning technique useful, please cite our paper:
 
