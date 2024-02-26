@@ -32,15 +32,22 @@ Code to calculate dinter and dintra is given in Table 5 of [our paper](https://a
 
 1) To calculate dintra, run:
 
-```
-python compute_avg_dist_to_cluster_centroid.py --num_clusters [NUMBER_OF_CLUSTERS] --sorted_clusters_path [PATH_TO_CLUSTERS] --avg_distance_to_cent_save_path [SAVE_FILE_PATH_DINTRA]
+```bash
+python compute_avg_dist_to_cluster_centroid.py \
+    --num_clusters [NUMBER_OF_CLUSTERS] \
+    --sorted_clusters_path [PATH_TO_CLUSTERS] \
+    --avg_distance_to_cent_save_path [SAVE_FILE_PATH_DINTRA]
 ```
 
 2) To calculate dinter, run:
 
+```bash
+python compute_centroid_distances.py \
+    --num_clusters [NUMBER_OF_CLUSTERS] \
+    --sorted_clusters_path [PATH_TO_CLUSTERS] \
+    --mean_centroid_distances_save_path [SAVE_FILE_PATH_DINTER]
 ```
-python compute_centroid_distances.py --num_clusters [NUMBER_OF_CLUSTERS] --sorted_clusters_path [PATH_TO_CLUSTERS] --mean_centroid_distances_save_path [SAVE_FILE_PATH_DINTER]
-```
+
 
 ### Calculate the number of examples per cluster Nj.
 
