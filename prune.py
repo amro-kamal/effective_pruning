@@ -10,10 +10,10 @@ import pygtrie
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from copy import deepcopy
-from utils import get_logger
 import logging
 from cls_balance_pruning import ssp_pruning, random_pruning, load_arrays
-from utils import seed_everything
+from utils import seed_everything, build_and_save_trie
+
 
 METRIC_ID = 2
 # python prune.py --prune-ratio 0.8 --sorted-clusters-path "/fsx-labs/amroabbas/pruned/sorted_clusters/" --savedir "/fsx-labs/amroabbas/openclip-for-density-based-pruning-short-training/new_methods_pruning_files/random_pruning_0.8/"
@@ -145,10 +145,10 @@ def get_distances(args):
 
     elif args.density in ["dinter*dintra", "dintra*dinter"]:
         ## load d_inter and d_intra first
-        d_intra = np.load(args.avg_distance_to_centroid_file)
-        args.print_fn("avg_distance_to_centroid_file loaded")
+        d_intra = np.load(args.avg_distance_to_cent_save_path)
+        args.print_fn("avg_distance_to_cent_save_path loaded")
 
-        d_inter = np.load(args.NNs_centroids_distances_dir)
+        d_inter = np.load(args.mean_centroid_distances_save_path)
         args.print_fn("centroids_distances loaded")
 
         assert d_inter.shape == d_intra.shape
@@ -191,22 +191,16 @@ def main(args=None):
         help="temperature for softmax to turn the inter-cluster distances into a probability distribution",
     )
     parser.add_argument(
-        "--distances-dir",
-        default="/private/home/evgeniarusak/SemDeDup/SemDeDup/clustering/results_spp_recalc_5k/distances/",
-        type=str,
-        help="location of the intra- vs inter-class distances. Output when running calculate_distances.sh",
-    )
-    parser.add_argument(
-        "--NNs-centroids-distances-dir",
+        "--mean_centroid_distances_save_path",
         default="",
         type=str,
-        help="location of NNs_centroids_distances_dir distances. Output when running calculate_distances.sh",
+        help="location of mean_centroid_distances_save_path distances. Output of running 'python compute_centroid_distances.py'",
     )
     parser.add_argument(
-        "--avg-distance-to-centroid-file",
+        "--avg_distance_to_cent_save_path",
         default="",
         type=str,
-        help="location of avg_distance_to_centroid_file distances. Output when running compute_avg_distance_to_centroid.sh",
+        help="location of avg_distance_to_centroid_file distances. Output of running 'python compute_avg_dist_to_cluster_centroid.py'",
     )
     parser.add_argument(
         "--sorted-clusters-path",
@@ -217,7 +211,7 @@ def main(args=None):
     parser.add_argument("--total-dataset-size", default=50749149, type=int)
     parser.add_argument(
         "--which-to-keep",
-        default="False",
+        default="hard",
         choices=["hard", "easy", "random"],
         type=str,
         help="keep hard/easy/random examples from cluster",
@@ -233,7 +227,7 @@ def main(args=None):
     parser.add_argument(
         "--density",
         type=str,
-        default="uniform",
+        default="dintra*dinter",
         help="density method",
         choices=[
             "clustersize",
@@ -393,7 +387,7 @@ def main(args=None):
         )
     )
 
-    # get the pruned paths and build the trie file:
+    # get the pruned paths:
     pruning_fn = get_paths
 
     all_paths_pruned, all_distances, pruned_distances = pruning_fn(
@@ -410,9 +404,11 @@ def main(args=None):
     print_fn(
         f"Number of final paths, fraction of total dataset: , {len(all_paths_pruned)}, {len(all_paths_pruned) / args.total_dataset_size}",
     )
-    with open(os.path.join(args.save_dir, args.name + "_paths.txt"), "w") as fp:
+    with open(os.path.join(args.save_dir, args.name + "_paths.pickle"), "w") as fp:
         fp.write("\n".join(all_paths_pruned))
 
+    # Build and save the trie file:
+    build_and_save_trie(all_paths_pruned, file_path=os.path.join(args.save_dir, args.name + "_trie.txt")
 
 
 if __name__ == "__main__":
