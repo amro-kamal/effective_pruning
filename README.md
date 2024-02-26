@@ -68,7 +68,7 @@ The code will create a trie file which can be used to filter a webdataset during
 
 ## BibTex:
 
-If you find our study or our dataset helpful, please cite our paper:
+If you find our study or pruning technique useful, please cite our paper:
 
 ```bibtex
 @inproceedings{kamal2024density,
